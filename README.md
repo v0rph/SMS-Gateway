@@ -9,6 +9,9 @@ TODO Simple text about the project ^_^
 * Install mysql
   $ sudo apt-get install mysql-server mysql-client
 
+* Install mysql gem
+  $ gem install mysql -- --with-mysql-config=/usr/bin/mysql_config
+
 * Import gammu db
   $ mysqladmin -u root -p create sms
   $ gunzip -c /usr/share/doc/gammu/examples/sql/mysql.sql.gz | mysql -u yourmysqluser -p -h localhost sms
