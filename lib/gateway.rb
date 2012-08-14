@@ -4,10 +4,11 @@ require 'behaviour.rb'
 
 class Gateway
   def initialize(config, options={:initialize_gammu => true})
-    raise ArgumentError, "config should be an hash"          unless config.is_a? Hash
+    raise ArgumentError, "config should be a hash"           unless config.is_a? Hash
     raise ArgumentError, "options[:phones] is missing."      unless @phones      = config['phones']
     raise ArgumentError, "options[:ports] is missing."       unless @ports       = config['ports'].split(";")
     raise ArgumentError, "options[:datafolder] is missing."  unless @datafolder  = config['datafolder']
+    raise ArgumentError, "options[:mysql] is missing"        unless @sqldata     = config['mysql']
     unless options[:initialize_gammu] == false
       phoneloader
       start
@@ -40,7 +41,7 @@ class Gateway
   
   #sends message to specified phone, if none specified identifies prefered phone
   def send(user, number, message, phone=nil)
-    phone = Behaviour.select_phone(number, user['behaviour']) if phone.nil?
+    phone = Behaviour.select_phone(number, user['behaviour'], @sqldata) if phone.nil?
     if phone #se fizer match com os existentes
       `gammu-smsd-inject -c ~/.sms/gammu-smsdrc-#{phone} TEXT #{number} -text "#{message}"` # send to daemon
       #LOGIT que foi para a fila

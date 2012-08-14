@@ -6,6 +6,9 @@ describe Gateway do
       "359419001297612" => "vodafone",
       "359419001303212" => "tmn",
       "356479007544261" => "optimus"},
+    "mysql" => {
+      "user" => "sqluser",
+      "password" => "sqlpassword"},
     "ports"      => "ttyACM0;ttyACM1;ttyACM2",
     "datafolder" => "./tmp/",
     "users"      => {
@@ -19,6 +22,10 @@ describe Gateway do
       "359419001297612" => "vodafone",
       "359419001303212" => "tmn",
       "356479007544261" => "optimus"},
+    "mysql" => {
+      "user" => "sqluser",
+      "password" => "sqlpassword"},
+
     "ports"      => "ttyACM0;ttyACM1;ttyACM2",
     "datafolder" => "./tmp/",
     "behaviour"  => {
@@ -32,6 +39,10 @@ describe Gateway do
       "359419001303212" => "tmn",
       "356479007544261" => "optimus"
     },
+    "mysql" => {
+      "user" => "sqluser",
+      "password" => "sqlpassword"},
+
     "ports"      => "ttyACM0;ttyACM1;ttyACM2",
     "datafolder" => "./"
   }
@@ -43,6 +54,10 @@ describe Gateway do
         "359419001303212" => "tmn",
         "356479007544261" => "optimus"
       },
+      "mysql" => {
+        "user" => "sqluser",
+        "password" => "sqlpassword"},
+
       "ports"      => "ttyACM0;ttyACM1;ttyACM2",
       "datafolder" => "./tmp/"
     }

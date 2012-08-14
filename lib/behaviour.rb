@@ -1,12 +1,22 @@
 module Behaviour
+  require 'mysql'
   # selects phone from given behaviour
-  def self.select_phone(number, behaviour)
+  def self.select_phone(number, behaviour, sqldata)
     #self.send(behaviour['type'], number, behaviour['options'])
     case behaviour['type']
     when "pt_single"
       return pt_single(number,behaviour['options'])
     when "pt_default"
-      return pt_default(number, behaviour['options'])
+      phone = pt_default(number, behaviour['options'])
+      if (check_limits(phone, behaviour, sqldata) == 1)
+        return phone
+      else
+        if (phone == behaviour['default'])
+          return 'warning' #limits have been reached
+        else
+          return behaviour['default']
+        end
+      end
     end
   end
   
@@ -30,16 +40,19 @@ module Behaviour
     pt_checkphoneid(number)
   end
   
-  def self.check_limits(number , options)
+  def self.check_limits(number , behaviour, sqldata)
     def_phone = pt_checkphoneid(number)
-    count = options['phones'][def_phone][0..-1]
-    timespan = options['phones'][def_phone].split('').last
+    raise ArgumentError, "Bad number" if def_phone == "Invalid Number"
+    count = behaviour['options'][def_phone][0..-2]
+    timespan = behaviour['options'][def_phone].split('').last
+    mysqluser = sqldata['user']
+    mysqlpassword = sqldata['password']
     case timespan
     when /w|W|s|S/
       #weekly / semanal
       #check number of sent items by week -> select Count(ID) from sentitems where  Week(SendingDateTime) = Week(Now()) AND Year(SendingDateTime) = Year(Now());
-      db = Mysql.real_connect('localhost', '%user', '%sqlpassword', 'sms');
-      rs = db.query 'Select ID from sentitems where Week(SendingDateTime) = Week(Now()) AND Year(SendingDateTime) = Year(Now));'
+      db = Mysql.real_connect('localhost', mysqluser, mysqlpassword, 'sms');
+      rs = db.query 'Select ID from sentitems where Week(SendingDateTime) = Week(Now()) AND Year(SendingDateTime) = Year(Now());'
       n_rows = rs.num_rows
       puts "There are #{n_rows} rows in the result set"
       #n_rows.times do
@@ -47,13 +60,23 @@ module Behaviour
       #end
     when /M|m/
       #montly / mensal
+      db = Mysql.real_connect('localhost', mysqluser, mysqlpassword, 'sms');
+      rs = db.query 'Select ID from sentitems where Month(SendingDateTime) = Month(Now()) AND Year(SendingDateTime) = Year(Now());'
+      n_rows = rs.num_rows
+      puts "There are #{n_rows} rows in the result set"
+
     when /D|d/
       #daily / diario
       # check number of sent items by day -> select Count(ID) from sentitems where DayOfYear(SendingDateTime) = DayOfYear(Now());
+      db = Mysql.real_connect('localhost', mysqluser, mysqlpassword, 'sms');
+      rs = db.query 'select ID from sentitems where DayOfYear(SendingDateTime) = DayOfYear(Now());'
+      n_rows = rs.num_rows
+      puts "There are #{n_rows} rows in the result set"
     else
       #!!badconfig!!
+      return -2
     end
-    if (n_rows < count)
+    if (n_rows < Integer(count))
       return 1
     else
       return -1
@@ -70,7 +93,7 @@ module Behaviour
       when /^(\+351)?93[0-9]{7}$/
         phone = "optimus"
       else 
-        "Invalid Number"
+        return "Invalid Number"
     end
   end
   

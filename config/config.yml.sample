@@ -1,12 +1,19 @@
 datafolder: "~/tmp/"
+
 phones: 
   359419001297612: "vodafone"
   359419001303212: "tmn"
   356479007544261: "optimus"
+
 ports: "ttyACM0;ttyACM1;ttyACM2"
+
+mysql:
+  user: "sqluser"
+  password: "sqlpassword"
+
 users:
   username:
-    password: "password"  
+    password: "password"
     behaviour:
       type: "pt-three"
       default: "tmn"
