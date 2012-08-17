@@ -14,7 +14,9 @@ module Behaviour
         if (phone == behaviour['default'])
           return 'warning' #limits have been reached
         else
-          return behaviour['default']
+          if (phone != "Invalid Number")
+            return behaviour['default']
+          end
         end
       end
     end
@@ -40,9 +42,11 @@ module Behaviour
     pt_checkphoneid(number)
   end
   
-  def self.check_limits(number , behaviour, sqldata)
-    def_phone = pt_checkphoneid(number)
-    raise ArgumentError, "Bad number" if def_phone == "Invalid Number"
+  def self.check_limits(def_phone , behaviour, sqldata)
+    if def_phone == "Invalid Number"
+      #raise ArgumentError, "Bad number"
+      return -1
+    end
     count = behaviour['options'][def_phone][0..-2]
     timespan = behaviour['options'][def_phone].split('').last
     mysqluser = sqldata['user']

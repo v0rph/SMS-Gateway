@@ -8,7 +8,7 @@ require 'yaml'
 require 'gateway.rb'
 
 @@config = YAML.load_file("config/config.yml")
-@gateway = Gateway.new @@config
+@@gateway = Gateway.new @@config
 
 # post is {user, key, message, numbers[]}
 post '/form' do
@@ -18,10 +18,12 @@ post '/form' do
   #return params[:user] unless user
   return(if user['password'] == params[:key]
     params[:numbers].each do |number|       
-      if @gateway.send(user, number, params[:message])
-        "Sent"
+      if @@gateway.send(user['behaviour'], number, params[:message])
+        puts number
+        puts "Sent"
       else
-        "Invalid Number"
+        puts number
+        puts "Invalid Number"
       end
     end
   else 

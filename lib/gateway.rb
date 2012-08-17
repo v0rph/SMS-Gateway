@@ -41,8 +41,8 @@ class Gateway
   
   #sends message to specified phone, if none specified identifies prefered phone
   def send(user, number, message, phone=nil)
-    phone = Behaviour.select_phone(number, user['behaviour'], @sqldata) if phone.nil?
-    if phone #se fizer match com os existentes
+    phone = Behaviour.select_phone(number, user, @sqldata) #if phone.nil?
+    if @phones.values.include?(phone) #se fizer match com os existentes
       `gammu-smsd-inject -c ~/.sms/gammu-smsdrc-#{phone} TEXT #{number} -text "#{message}"` # send to daemon
       #LOGIT que foi para a fila
     else 
