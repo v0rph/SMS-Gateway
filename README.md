@@ -28,15 +28,16 @@ Edit config #to-do auto config
   under phones edit with your own
                "deviceIMEI": "deviceOperator"
 
-To config gammu mysql connection open the config file, find [smsd] and replace user=yourmysqluser and password=yourmysqlpassword with your own
-
-    $ vim config/gammu-smsdrc
 
 Phone config file goes to ./tmp/ #datafolder
 
     $ mkdir ./tmp/ #datafolder
   
     $ cp config/gammu-smsdrc ./tmp/ #to datafolder
+
+To config gammu mysql connection open the config file, find [smsd] and replace user=yourmysqluser and password=yourmysqlpassword with your own
+
+    $ vim ./tmp/gammu-smsdrc
 
 Install ruby ruby-dev rubygems and sinatra
 

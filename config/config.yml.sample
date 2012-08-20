@@ -12,10 +12,10 @@ mysql:
   password: "sqlpassword"
 
 users:
-  username:
+  "testname":
     password: "password"
     behaviour:
-      type: "pt-three"
+      type: "pt_default"
       default: "tmn"
       options:
         vodafone: "1500W"

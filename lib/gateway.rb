@@ -43,7 +43,7 @@ class Gateway
   def send(user, number, message, phone=nil)
     phone = Behaviour.select_phone(number, user, @sqldata) #if phone.nil?
     if @phones.values.include?(phone) #se fizer match com os existentes
-      `gammu-smsd-inject -c #{@datafolder}/#{phone} TEXT #{number} -text "#{message}"` # send to daemon
+      `gammu-smsd-inject -c #{@datafolder}#{phone} TEXT #{number} -text "#{message}"` # send to daemon
       #LOGIT que foi para a fila
     else 
       #LOGIT que alguem tentou mas nao foi para a fila
