@@ -30,17 +30,17 @@ Edit config #to-do auto config
 
 To config gammu mysql connection open the config file, find [smsd] and replace user=yourmysqluser and password=yourmysqlpassword with your own
 
-    $ vim config/gammu-smsd
+    $ vim config/gammu-smsdrc
 
-Phone config file goes to ~/.sms/ #datafolder
+Phone config file goes to ./tmp/ #datafolder
 
-    $ mkdir ~/.sms/ #datafolder
+    $ mkdir ./tmp/ #datafolder
   
-    $ cp config/gammu-smsd ~/.sms/ #to datafolder
+    $ cp config/gammu-smsdrc ./tmp/ #to datafolder
 
-Install ruby rubygems and sinatra
+Install ruby ruby-dev rubygems and sinatra
 
-    $ sudo apt-get install ruby rubygems
+    $ sudo apt-get install ruby ruby-dev rubygems
   
     $ gem install sinatra --no-ri --no-rdoc
 
