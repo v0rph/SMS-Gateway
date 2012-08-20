@@ -3,60 +3,69 @@ SMS Gateway
 
 TODO Simple text about the project ^_^
 
-* First install gammu and gammu sms daemon 
+First install gammu and gammu sms daemon 
 
-  $ sudo apt-get install gammu gammu-smsd
+    $ sudo apt-get install gammu gammu-smsd
 
-* Install mysql
+Install mysql
 
-  $ sudo apt-get install mysql-server mysql-client
+    $ sudo apt-get install mysql-server mysql-client libmysqlclient-dev
 
-* Install mysql gem
+Import gammu db
 
-  $ gem install mysql -- --with-mysql-config=/usr/bin/mysql_config
+    $ mysqladmin -u root -p create sms
 
-* Import gammu db
+    $ gunzip -c /usr/share/doc/gammu/examples/sql/mysql.sql.gz | mysql -u yourmysqluser -p -h localhost sms
 
-  $ mysqladmin -u root -p create sms
-  $ gunzip -c /usr/share/doc/gammu/examples/sql/mysql.sql.gz | mysql -u yourmysqluser -p -h localhost sms
+Create new config
 
-* Create new config
+    $ cp config/config.yml.sample config/config.yml
 
-  $ cp config/config.yml.sample config/config.yml
+Edit config #to-do auto config
 
-* Edit config #to-do auto config
-
-  $ vim config/config.yml
+    $ vim config/config.yml
   place your own mysql username and password  
   under phones edit with your own
                "deviceIMEI": "deviceOperator"
 
-* To config gammu mysql connection open the config file, find [smsd] and replace user=yourmysqluser and password=yourmysqlpassword with your own
+To config gammu mysql connection open the config file, find [smsd] and replace user=yourmysqluser and password=yourmysqlpassword with your own
 
-  $ vim config/gammu-smsd
+    $ vim config/gammu-smsd
 
-* Phone config file goes to ~/.sms/ #datafolder
+Phone config file goes to ~/.sms/ #datafolder
 
-  $ mkdir ~/.sms/ #datafolder
-  $ cp config/gammu-smsd ~/.sms/ #to datafolder
+    $ mkdir ~/.sms/ #datafolder
+  
+    $ cp config/gammu-smsd ~/.sms/ #to datafolder
 
-* Install ruby rubygems and sinatra
+Install ruby rubygems and sinatra
 
-  $ sudo apt-get install ruby rubygems
-  $ gem install sinatra
+    $ sudo apt-get install ruby rubygems
+  
+    $ gem install sinatra --no-ri --no-rdoc
 
-* Plug in devices
+Install mysql gem
 
-* Run app.rb
-  $ ruby app.rb
+    $ gem install mysql -- --with-mysql-config=/usr/bin/mysql_config
 
-* Example post can be found in massMsg.html
+
+Plug in devices
+
+Run app.rb
+
+    $ ruby app.rb
+
+Example post can be found in massMsg.html
   
   open in browser to send mass messages
-  $ firefox massMsg.html
-  or
-  $ google-chrome massMsg.html
 
+    $ firefox massMsg.html
+
+  or
+
+    $ google-chrome massMsg.html
+
+Additional Notes:
 * USE WITH CARE!
 * By default behaviour, all phone messages present in the phone will be copied to mysql database and then WIPED FROM THE PHONE!
-
+* Don't use root as mysql user, create another user
