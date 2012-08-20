@@ -18,7 +18,7 @@ connection = at115200
 [smsd]
 #service = files
 #logfile = /etc/.gammu-smsdlog
-service = sql
+service = mysql
 driver = native_mysql
 user = yourmysqluser
 password = yourmysqlpassword
