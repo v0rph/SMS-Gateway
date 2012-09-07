@@ -7,6 +7,9 @@ require 'yaml'
 
 require 'gateway.rb'
 
+#set :run true
+#set :bind '0.0.0.0'
+
 @@config = YAML.load_file("config/config.yml")
 @@gateway = Gateway.new @@config
 
