@@ -21,9 +21,9 @@ post '/form' do
   #return params[:user] unless user
   return(if user['password'] == params[:key]
     params[:numbers].each do |number|       
-      if @@gateway.send(user['behaviour'], number, params[:message])
+      if @@gateway.send(params[:user], number, params[:message])
         puts number
-        puts "Sent"
+        puts "Queued"
       else
         puts number
         puts "Invalid Number"

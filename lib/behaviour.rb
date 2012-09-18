@@ -7,16 +7,19 @@ module Behaviour
         return pt_single(number,behaviour['options'])
       when "pt_default"
         phone = pt_default(number, behaviour['options'])
-        if (check_limits(phone, behaviour, sqldata) == 1)
+        if ((check_limits(phone, behaviour, sqldata) == 1)||(phone == 'Invalid Number'))
           return phone
         else
-          if (phone == behaviour['default'])
-            return 'bukkit' #limits have been reached
-          else
-            if (phone != "Invalid Number")
-              return behaviour['default']
-            end
-          end
+          return 'bukkit'
+#          if (phone == behaviour['default'])
+#            return 'bukkit' #limits have been reached
+#          else
+#            if ((check_limits(behaviour['default'], behaviour, sqldata) == 1))
+#              return behaviour['default']
+#            else
+#		return 'bukkit'
+#            end
+#          end
         end
     end
   end
@@ -74,7 +77,10 @@ module Behaviour
       #!!badconfig!!
       return -2
     end
-    if (n_rows < Integer(count))
+    db = Mysql.real_connect('localhost',mysqluser,mysqlpassword,'sms');
+    rs = db.query 'Select ID from outbox where SenderID like '+"\""+def_phone+"\""+';'
+    queued = rs.num_rows
+    if ((n_rows < Integer(count)) && (queued < Integer(count) - n_rows ))
       return 1
     else
       return -1
