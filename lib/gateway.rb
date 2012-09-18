@@ -46,13 +46,25 @@ class Gateway
       `gammu-smsd-inject -c #{@datafolder}#{phone} TEXT #{number} -text "#{message}"` # send to daemon
       #LOGIT que foi para a fila
     else 
-      #LOGIT que alguem tentou mas nao foi para a fila
+      if phone == "bukkit"
+        bukkit(number,message)
+      end
     end
   end
+
+  def bukkit(number,message)
+    IO.append("./tmp/bukkit","#{number}`#{message}")
+  end
+
 end
 
 class IO
   def self.write(filepath, text)
     File.open(filepath, "w") { |f| f << text }
   end
+
+  def self.append(filepath, text)
+    File.open(filepath, "a+") { |f| f << text }
+  end
+
 end

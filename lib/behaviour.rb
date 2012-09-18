@@ -2,23 +2,22 @@ module Behaviour
   require 'mysql'
   # selects phone from given behaviour
   def self.select_phone(number, behaviour, sqldata)
-    #self.send(behaviour['type'], number, behaviour['options'])
     case behaviour['type']
-    when "pt_single"
-      return pt_single(number,behaviour['options'])
-    when "pt_default"
-      phone = pt_default(number, behaviour['options'])
-      if (check_limits(phone, behaviour, sqldata) == 1)
-        return phone
-      else
-        if (phone == behaviour['default'])
-          return 'warning' #limits have been reached
+      when "pt_single"
+        return pt_single(number,behaviour['options'])
+      when "pt_default"
+        phone = pt_default(number, behaviour['options'])
+        if (check_limits(phone, behaviour, sqldata) == 1)
+          return phone
         else
-          if (phone != "Invalid Number")
-            return behaviour['default']
+          if (phone == behaviour['default'])
+            return 'bukkit' #limits have been reached
+          else
+            if (phone != "Invalid Number")
+              return behaviour['default']
+            end
           end
         end
-      end
     end
   end
   
@@ -54,14 +53,10 @@ module Behaviour
     case timespan
     when /w|W|s|S/
       #weekly / semanal
-      #check number of sent items by week -> select Count(ID) from sentitems where  Week(SendingDateTime) = Week(Now()) AND Year(SendingDateTime) = Year(Now());
       db = Mysql.real_connect('localhost', mysqluser, mysqlpassword, 'sms');
       rs = db.query 'Select ID from sentitems where Week(SendingDateTime) = Week(Now()) AND Year(SendingDateTime) = Year(Now());'
       n_rows = rs.num_rows
       puts "There are #{n_rows} rows in the result set"
-      #n_rows.times do
-      #  puts rs.fetch_row.join("\s")
-      #end
     when /M|m/
       #montly / mensal
       db = Mysql.real_connect('localhost', mysqluser, mysqlpassword, 'sms');
@@ -71,7 +66,6 @@ module Behaviour
 
     when /D|d/
       #daily / diario
-      # check number of sent items by day -> select Count(ID) from sentitems where DayOfYear(SendingDateTime) = DayOfYear(Now());
       db = Mysql.real_connect('localhost', mysqluser, mysqlpassword, 'sms');
       rs = db.query 'select ID from sentitems where DayOfYear(SendingDateTime) = DayOfYear(Now());'
       n_rows = rs.num_rows
@@ -100,5 +94,5 @@ module Behaviour
         return "Invalid Number"
     end
   end
-  
 end
+
