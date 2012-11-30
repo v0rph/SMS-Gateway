@@ -1,5 +1,6 @@
 module Behaviour
   require 'mysql'
+
   # selects phone from given behaviour
   def self.select_phone(number, behaviour, sqldata)
     case behaviour['type']
@@ -7,19 +8,10 @@ module Behaviour
         return pt_single(number,behaviour['options'])
       when "pt_default"
         phone = pt_default(number, behaviour['options'])
-        if ((check_limits(phone, behaviour, sqldata) == 1)||(phone == 'Invalid Number'))
+        if ((check_limits(phone, behaviour, sqldata) >= 1)||(phone == 'Invalid Number'))
           return phone
         else
           return 'bukkit'
-#          if (phone == behaviour['default'])
-#            return 'bukkit' #limits have been reached
-#          else
-#            if ((check_limits(behaviour['default'], behaviour, sqldata) == 1))
-#              return behaviour['default']
-#            else
-#		return 'bukkit'
-#            end
-#          end
         end
     end
   end
@@ -57,20 +49,20 @@ module Behaviour
     when /w|W|s|S/
       #weekly / semanal
       db = Mysql.real_connect('localhost', mysqluser, mysqlpassword, 'sms');
-      rs = db.query 'Select ID from sentitems where Week(SendingDateTime) = Week(Now()) AND Year(SendingDateTime) = Year(Now());'
+      rs = db.query 'Select ID from sentitems where Week(SendingDateTime) = Week(Now()) AND Year(SendingDateTime) = Year(Now()) AND SenderID like '+"\""+def_phone+"\""+';'
       n_rows = rs.num_rows
       puts "There are #{n_rows} rows in the result set"
     when /M|m/
       #montly / mensal
       db = Mysql.real_connect('localhost', mysqluser, mysqlpassword, 'sms');
-      rs = db.query 'Select ID from sentitems where Month(SendingDateTime) = Month(Now()) AND Year(SendingDateTime) = Year(Now());'
+      rs = db.query 'Select ID from sentitems where Month(SendingDateTime) = Month(Now()) AND Year(SendingDateTime) = Year(Now()) AND SenderID like '+"\""+def_phone+"\""+';'
       n_rows = rs.num_rows
       puts "There are #{n_rows} rows in the result set"
 
     when /D|d/
       #daily / diario
       db = Mysql.real_connect('localhost', mysqluser, mysqlpassword, 'sms');
-      rs = db.query 'select ID from sentitems where DayOfYear(SendingDateTime) = DayOfYear(Now());'
+      rs = db.query 'select ID from sentitems where DayOfYear(SendingDateTime) = DayOfYear(Now()); AND SenderID like '+"\""+def_phone+"\""+';'
       n_rows = rs.num_rows
       puts "There are #{n_rows} rows in the result set"
     else
@@ -81,7 +73,7 @@ module Behaviour
     rs = db.query 'Select ID from outbox where SenderID like '+"\""+def_phone+"\""+';'
     queued = rs.num_rows
     if ((n_rows < Integer(count)) && (queued < Integer(count) - n_rows ))
-      return 1
+      return Integer(count) - n_rows
     else
       return -1
     end
@@ -101,4 +93,3 @@ module Behaviour
     end
   end
 end
-

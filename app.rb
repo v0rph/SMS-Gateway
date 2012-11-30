@@ -37,3 +37,11 @@ end
 get '/form' do
   File.read(File.join('public', 'massMsg.html'))
 end
+
+get '/credits/:operator' do
+  if (params[:operator] == 'vodafone' || params[:operator] == 'tmn' || params[:operator]== 'optimus')
+    Behaviour.check_limits(params[:operator],@@config['users']['testname']['behaviour'],@@config['mysql']).to_s
+  else
+    '-1'
+  end
+end
