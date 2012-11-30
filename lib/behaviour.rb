@@ -62,7 +62,7 @@ module Behaviour
     when /D|d/
       #daily / diario
       db = Mysql.real_connect('localhost', mysqluser, mysqlpassword, 'sms');
-      rs = db.query 'select ID from sentitems where DayOfYear(SendingDateTime) = DayOfYear(Now()); AND SenderID like '+"\""+def_phone+"\""+';'
+      rs = db.query 'select ID from sentitems where DayOfYear(SendingDateTime) = DayOfYear(Now()) AND SenderID like '+"\""+def_phone+"\""+';'
       n_rows = rs.num_rows
       puts "There are #{n_rows} rows in the result set"
     else
